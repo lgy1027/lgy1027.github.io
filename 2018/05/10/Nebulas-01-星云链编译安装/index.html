@@ -102,23 +102,24 @@
 
 
 
-  <meta name="description" content="李国玉的技术博客，主要研究区块链方向，坚信区块链是第三次革命，拥抱区块链">
-<meta property="og:type" content="website">
-<meta property="og:title" content="李国玉区块链博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="星云链的项目代码已经发布了几个版本，经过测试可以在本地运行，大家可以下载星云链源代码在本地编译私有链。 想了解星云链的同学可以阅读星云链非技术白皮书。 对技术感兴趣的同学可以看星云链技术白皮书和星云链Github 星云链现阶段只能在Mac和Linux上运行，后续会推出windows版本。 Golang环境搭建   Components    Version     Description  Gol">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nebulas-01  星云链编译安装">
+<meta property="og:url" content="http://yoursite.com/2018/05/10/Nebulas-01-星云链编译安装/index.html">
 <meta property="og:site_name" content="李国玉区块链博客">
-<meta property="og:description" content="李国玉的技术博客，主要研究区块链方向，坚信区块链是第三次革命，拥抱区块链">
+<meta property="og:description" content="星云链的项目代码已经发布了几个版本，经过测试可以在本地运行，大家可以下载星云链源代码在本地编译私有链。 想了解星云链的同学可以阅读星云链非技术白皮书。 对技术感兴趣的同学可以看星云链技术白皮书和星云链Github 星云链现阶段只能在Mac和Linux上运行，后续会推出windows版本。 Golang环境搭建   Components    Version     Description  Gol">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-10T05:30:39.729Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="李国玉区块链博客">
-<meta name="twitter:description" content="李国玉的技术博客，主要研究区块链方向，坚信区块链是第三次革命，拥抱区块链">
+<meta name="twitter:title" content="Nebulas-01  星云链编译安装">
+<meta name="twitter:description" content="星云链的项目代码已经发布了几个版本，经过测试可以在本地运行，大家可以下载星云链源代码在本地编译私有链。 想了解星云链的同学可以阅读星云链非技术白皮书。 对技术感兴趣的同学可以看星云链技术白皮书和星云链Github 星云链现阶段只能在Mac和Linux上运行，后续会推出windows版本。 Golang环境搭建   Components    Version     Description  Gol">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/10/Nebulas-01-星云链编译安装/"/>
 
 
 
@@ -128,7 +129,7 @@
   };
 </script>
 
-  <title>李国玉区块链博客</title>
+  <title>Nebulas-01  星云链编译安装 | 李国玉区块链博客</title>
   
 
 
@@ -175,8 +176,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -216,7 +216,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
     <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-首页"></i> <br />Home</a>
   </li>
@@ -276,9 +276,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -310,11 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/10/Nebulas-01-星云链编译安装/" itemprop="url">
-                  Nebulas-01  星云链编译安装
-                </a>
+          <h1 class="post-title" itemprop="name headline">Nebulas-01  星云链编译安装
               
             
           </h1>
@@ -377,9 +373,7 @@
       
 
       
-        
-          
-            <p>星云链的项目代码已经发布了几个版本，经过测试可以在本地运行，大家可以下载星云链源代码在本地编译私有链。</p>
+        <p>星云链的项目代码已经发布了几个版本，经过测试可以在本地运行，大家可以下载星云链源代码在本地编译私有链。</p>
 <p>想了解星云链的同学可以阅读星云链非技术白皮书。</p>
 <p>对技术感兴趣的同学可以看星云链技术白皮书和星云链Github</p>
 <p>星云链现阶段只能在Mac和Linux上运行，后续会推出windows版本。</p>
@@ -607,8 +601,6 @@ stats {
 <p>提示: 目前的DPoS共识算法，会有21个节点轮流出块。由于我们只启动了21个矿工节点中的一个矿工节点，所以每隔15*21s才出一个块。你可以启动更多的矿工节点，填补的空缺。但是需要注意，多个节点间的端口号不要相互冲突了。</p>
 <p>版权声明：博客中的文章版权归博主所有，未经授权，禁止转载，转载请注明出处，联系方式：lixuan111222(微信)</p>
 
-          
-        
       
     </div>
 
@@ -628,147 +620,28 @@ stats {
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/06/Ubuntu-hexo-github搭建个人博客/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="李国玉">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="李国玉区块链博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/06/Ubuntu-hexo-github搭建个人博客/" itemprop="url">
-                  Ubuntu+hexo+github搭建个人博客
-                </a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/2018/05/06/Ubuntu-hexo-github搭建个人博客/" rel="next" title="Ubuntu+hexo+github搭建个人博客">
+                <i class="fa fa-chevron-left"></i> Ubuntu+hexo+github搭建个人博客
+              </a>
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-06 00:21:18" itemprop="dateCreated datePublished" datetime="2018-05-06T00:21:18+08:00">2018-05-06</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -778,14 +651,19 @@ stats {
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -979,6 +857,10 @@ stats {
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
 
   
 
