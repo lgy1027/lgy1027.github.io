@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="go 调用 sha256 加密12345678910111213141516171819202122232425262728293031package mainimport (	&amp;quot;crypto/sha256&amp;quot;	&amp;quot;encoding/hex&amp;quot;	&amp;quot;fmt&amp;quot;	&amp;quot;os&amp;quot;	&amp;quot;io&amp;quot;)func main() &amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sha256 加密算法原理">
+<meta property="og:url" content="http://liguoyu.com/2018/04/13/Sha256 加密算法原理/index.html">
+<meta property="og:site_name" content="李国玉区块链博客">
+<meta property="og:description" content="go 调用 sha256 加密12345678910111213141516171819202122232425262728293031package mainimport (	&amp;quot;crypto/sha256&amp;quot;	&amp;quot;encoding/hex&amp;quot;	&amp;quot;fmt&amp;quot;	&amp;quot;os&amp;quot;	&amp;quot;io&amp;quot;)func main() &amp;#">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-23T15:33:09.675Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sha256 加密算法原理">
+<meta name="twitter:description" content="go 调用 sha256 加密12345678910111213141516171819202122232425262728293031package mainimport (	&amp;quot;crypto/sha256&amp;quot;	&amp;quot;encoding/hex&amp;quot;	&amp;quot;fmt&amp;quot;	&amp;quot;os&amp;quot;	&amp;quot;io&amp;quot;)func main() &amp;#">
+
+
+
+
+
+
+  <link rel="canonical" href="http://liguoyu.com/2018/04/13/Sha256 加密算法原理/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Sha256 加密算法原理 | 李国玉区块链博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李国玉区块链博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-首页"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-分类"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-归档"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://liguoyu.com/2018/04/13/Sha256 加密算法原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李国玉">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李国玉区块链博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sha256 加密算法原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-04-13 19:35:58" itemprop="dateCreated datePublished" datetime="2018-04-13T19:35:58+08:00">2018-04-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-05-23 23:33:09" itemprop="dateModified" datetime="2018-05-23T23:33:09+08:00">2018-05-23</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="go-调用-sha256-加密"><a href="#go-调用-sha256-加密" class="headerlink" title="go 调用 sha256 加密"></a>go 调用 sha256 加密</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;crypto/sha256&quot;</span><br><span class="line">	&quot;encoding/hex&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;os&quot;</span><br><span class="line">	&quot;io&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	//sha256加密</span><br><span class="line">	//第一种</span><br><span class="line">	sha:=sha256.New()</span><br><span class="line">	sha.Write([]byte(&quot;hello world&quot;))</span><br><span class="line">	str := hex.EncodeToString(sha.Sum(nil))</span><br><span class="line"></span><br><span class="line">	fmt.Println(str)</span><br><span class="line"></span><br><span class="line">	//第二种</span><br><span class="line">	var sha01 = sha256.Sum256([]byte(&quot;hello world&quot;))</span><br><span class="line">	fmt.Printf(&quot;%x \n&quot;,sha01)</span><br><span class="line"></span><br><span class="line">	//文件hash值</span><br><span class="line">	f,_ :=os.Open(&quot;test&quot;)</span><br><span class="line">	defer f.Close()</span><br><span class="line">	h := sha256.New()</span><br><span class="line">	io.Copy(h,f)</span><br><span class="line">	fmt.Printf(&quot;%x&quot;,h.Sum(nil))</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源码下载：<a href="https://github.com/didianV5/blockchain/tree/master/encryption/sha256" target="_blank" rel="noopener">https://github.com/didianV5/blockchain/tree/master/encryption/sha256</a></p>
+<h2 id="sha256-实现原理"><a href="#sha256-实现原理" class="headerlink" title="sha256 实现原理"></a>sha256 实现原理</h2><p>SHA-256 算法输入报文的最大长度不超过2^64 bit，输入按512-bit 分组进行处理，产生的输出是一个256-bit 的报文摘要。</p>
+<ul>
+<li><p><strong>附加填充比特</strong>：对报文进行填充使报文长度与448 模512 同余（长度=448 mod 512），填充的比特数范围是1 到512，填充比特串的最高位为1，其余位为0。就是先在报文后面加一个 1，再加很多个0，直到长度 满足 mod 512=448.为什么是448，因为448+64=512. 第二步会加上一个 64bit的 原始报文的 长度信息。</p>
+</li>
+<li><p><strong>附加长度值</strong> 将用64-bit 表示的初始报文（填充前）的位长度附加在步骤1 的结果后（低位字节优先）。</p>
+</li>
+<li><p><strong>初始化缓存</strong>：使用一个256-bit 的缓存来存放该散列函数的中间及最终结果。 该缓存表示为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const (</span><br><span class="line">	init0     = 0x6A09E667</span><br><span class="line">	init1     = 0xBB67AE85</span><br><span class="line">	init2     = 0x3C6EF372</span><br><span class="line">	init3     = 0xA54FF53A</span><br><span class="line">	init4     = 0x510E527F</span><br><span class="line">	init5     = 0x9B05688C</span><br><span class="line">	init6     = 0x1F83D9AB</span><br><span class="line">	init7     = 0x5BE0CD19</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>处理512-bit（16 个字）报文分组序列</strong>：该算法使用了六种基本逻辑函数，由64步迭代运算组成。每步都以256-bit 缓存值ABCDEFGH 为输入，然后更新缓存内容。 每步使用一个32-bit 常数值Kt 和一个32-bit Wt。 </p>
+<ul>
+<li>常数K为</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">var _K = []uint32&#123;</span><br><span class="line">	0x428a2f98,</span><br><span class="line">	0x71374491,</span><br><span class="line">	0xb5c0fbcf,</span><br><span class="line">	0xe9b5dba5,</span><br><span class="line">	0x3956c25b,</span><br><span class="line">	0x59f111f1,</span><br><span class="line">	0x923f82a4,</span><br><span class="line">	0xab1c5ed5,</span><br><span class="line">	0xd807aa98,</span><br><span class="line">	0x12835b01,</span><br><span class="line">	0x243185be,</span><br><span class="line">	0x550c7dc3,</span><br><span class="line">	0x72be5d74,</span><br><span class="line">	0x80deb1fe,</span><br><span class="line">	0x9bdc06a7,</span><br><span class="line">	0xc19bf174,</span><br><span class="line">	0xe49b69c1,</span><br><span class="line">	0xefbe4786,</span><br><span class="line">	0x0fc19dc6,</span><br><span class="line">	0x240ca1cc,</span><br><span class="line">	0x2de92c6f,</span><br><span class="line">	0x4a7484aa,</span><br><span class="line">	0x5cb0a9dc,</span><br><span class="line">	0x76f988da,</span><br><span class="line">	0x983e5152,</span><br><span class="line">	0xa831c66d,</span><br><span class="line">	0xb00327c8,</span><br><span class="line">	0xbf597fc7,</span><br><span class="line">	0xc6e00bf3,</span><br><span class="line">	0xd5a79147,</span><br><span class="line">	0x06ca6351,</span><br><span class="line">	0x14292967,</span><br><span class="line">	0x27b70a85,</span><br><span class="line">	0x2e1b2138,</span><br><span class="line">	0x4d2c6dfc,</span><br><span class="line">	0x53380d13,</span><br><span class="line">	0x650a7354,</span><br><span class="line">	0x766a0abb,</span><br><span class="line">	0x81c2c92e,</span><br><span class="line">	0x92722c85,</span><br><span class="line">	0xa2bfe8a1,</span><br><span class="line">	0xa81a664b,</span><br><span class="line">	0xc24b8b70,</span><br><span class="line">	0xc76c51a3,</span><br><span class="line">	0xd192e819,</span><br><span class="line">	0xd6990624,</span><br><span class="line">	0xf40e3585,</span><br><span class="line">	0x106aa070,</span><br><span class="line">	0x19a4c116,</span><br><span class="line">	0x1e376c08,</span><br><span class="line">	0x2748774c,</span><br><span class="line">	0x34b0bcb5,</span><br><span class="line">	0x391c0cb3,</span><br><span class="line">	0x4ed8aa4a,</span><br><span class="line">	0x5b9cca4f,</span><br><span class="line">	0x682e6ff3,</span><br><span class="line">	0x748f82ee,</span><br><span class="line">	0x78a5636f,</span><br><span class="line">	0x84c87814,</span><br><span class="line">	0x8cc70208,</span><br><span class="line">	0x90befffa,</span><br><span class="line">	0xa4506ceb,</span><br><span class="line">	0xbef9a3f7,</span><br><span class="line">	0xc67178f2,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Wt 是 分组之后的报文</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">for i := 0; i &lt; 16; i++ &#123;</span><br><span class="line">		j := i * 4</span><br><span class="line">		w[i] = uint32(p[j])&lt;&lt;24 | uint32(p[j+1])&lt;&lt;16 | uint32(p[j+2])&lt;&lt;8 | uint32(p[j+3])</span><br><span class="line">	&#125;</span><br><span class="line">	for i := 16; i &lt; 64; i++ &#123;</span><br><span class="line">		v1 := w[i-2]</span><br><span class="line">		t1 := (v1&gt;&gt;17 | v1&lt;&lt;(32-17)) ^ (v1&gt;&gt;19 | v1&lt;&lt;(32-19)) ^ (v1 &gt;&gt; 10)</span><br><span class="line">		v2 := w[i-15]</span><br><span class="line">		t2 := (v2&gt;&gt;7 | v2&lt;&lt;(32-7)) ^ (v2&gt;&gt;18 | v2&lt;&lt;(32-18)) ^ (v2 &gt;&gt; 3)</span><br><span class="line">		w[i] = t1 + w[i-7] + t2 + w[i-16]</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>64步迭代运算</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">for i := 0; i &lt; 64; i++ &#123;</span><br><span class="line">		t1 := h + ((e&gt;&gt;6 | e&lt;&lt;(32-6)) ^ (e&gt;&gt;11 | e&lt;&lt;(32-11)) ^ (e&gt;&gt;25 | e&lt;&lt;(32-25))) + ((e &amp; f) ^ (^e &amp; g)) + _K[i] + w[i]</span><br><span class="line"></span><br><span class="line">		t2 := ((a&gt;&gt;2 | a&lt;&lt;(32-2)) ^ (a&gt;&gt;13 | a&lt;&lt;(32-13)) ^ (a&gt;&gt;22 | a&lt;&lt;(32-22))) + ((a &amp; b) ^ (a &amp; c) ^ (b &amp; c))</span><br><span class="line"></span><br><span class="line">		h = g</span><br><span class="line">		g = f</span><br><span class="line">		f = e</span><br><span class="line">		e = d + t1</span><br><span class="line">		d = c</span><br><span class="line">		c = b</span><br><span class="line">		b = a</span><br><span class="line">		a = t1 + t2</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	h0 += a</span><br><span class="line">	h1 += b</span><br><span class="line">	h2 += c</span><br><span class="line">	h3 += d</span><br><span class="line">	h4 += e</span><br><span class="line">	h5 += f</span><br><span class="line">	h6 += g</span><br><span class="line">	h7 += h</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>生成256-bit的报文摘要</strong> 所有的512-bit分组处理完毕后，对于SHA-256算法最后一个分组产生的输出便是256-bit的报文摘要。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig.h[0], dig.h[1], dig.h[2], dig.h[3], dig.h[4], dig.h[5], dig.h[6], dig.h[7] = h0, h1, h2, h3, h4, h5, h6, h7</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a>源码下载</h2><p>源码地址： <a href="https://github.com/didianV5/blockchain/tree/master/encryption/sha256/source" target="_blank" rel="noopener">https://github.com/didianV5/blockchain/tree/master/encryption/sha256/source</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/12/GO模拟Hash散列表代码实现/" rel="next" title="go模拟Hash散列表代码实现">
+                <i class="fa fa-chevron-left"></i> go模拟Hash散列表代码实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/13/MD5加密算法原理及其GO语言实现/" rel="prev" title="MD5加密算法原理及其GO语言实现">
+                MD5加密算法原理及其GO语言实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李国玉</p>
+              <p class="site-description motion-element" itemprop="description">李国玉的技术博客，主要研究区块链方向，坚信区块链是第三次革命，拥抱区块链</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#go-调用-sha256-加密"><span class="nav-number">1.</span> <span class="nav-text">go 调用 sha256 加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sha256-实现原理"><span class="nav-number">2.</span> <span class="nav-text">sha256 实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码下载"><span class="nav-number">3.</span> <span class="nav-text">源码下载</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国玉</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
